@@ -6,9 +6,9 @@
     "extends": [
       "airbnb-base",
       "plugin:@typescript-eslint/recommended",
-      "plugin:import/typescript",
+      "prettier",
       "plugin:prettier/recommended",
-      "prettier"
+      "plugin:import/typescript"
     ],
     "globals": {
       "Atomics": "readonly",
