@@ -1,4 +1,4 @@
-class Identifier<T> {
+export default class Identifier<T> {
     constructor(private value: T) {
         this.value = value;
     }
@@ -25,5 +25,3 @@ class Identifier<T> {
         return this.value;
     }
 }
-
-export default Identifier;

@@ -1,17 +1,63 @@
 import Entity from '@core/domain/Entity';
 import UniqueEntityID from '@core/domain/UniqueEntityID';
+import Guard, { IGuardResult } from '@core/logic/Guard';
+import { left, Result, right } from '@core/logic/Result';
+import UserAge from './userAge';
+import UserEmail from './userEmail';
+import UserPassword from './userPassword';
 
-interface UserProps {
+interface ToCreateUserProps {
     name: string;
-    email: string;
-    age: number;
-    passwordHash: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-    isDeleted?: boolean;
+    email: UserEmail;
+    age: UserAge;
+    password: UserPassword;
 }
 
-class User extends Entity<UserProps> {
+type UserProps = ToCreateUserProps & {
+    createdAt: Date;
+    updatedAt: Date;
+    isDeleted: boolean;
+};
+
+export default class User extends Entity<UserProps> {
+    constructor(props: UserProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
+    public static create(props: ToCreateUserProps): Result<string, User> {
+        const guardResult = this.guardValidation(props);
+
+        if (!guardResult.succeeded) return left(guardResult.message as string);
+
+        const userProps: UserProps = {
+            ...props,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            isDeleted: false,
+        };
+
+        return right(new User(userProps));
+    }
+
+    public static build(props: UserProps, id: UniqueEntityID): Result<string, User> {
+        const guardResult = this.guardValidation(props);
+
+        if (!guardResult.succeeded) return left(guardResult.message as string);
+
+        return right(new User(props, id));
+    }
+
+    private static guardValidation(props: UserProps | ToCreateUserProps): IGuardResult {
+        const guardedProps = [
+            { argument: props.name, argumentName: 'Nome' },
+            { argument: props.email, argumentName: 'E-mail' },
+            { argument: props.age, argumentName: 'Idade' },
+            { argument: props.password, argumentName: 'Senha' },
+        ];
+
+        return Guard.againstNullOrUndefinedBulk(guardedProps);
+    }
+
     get id(): UniqueEntityID {
         return this._id;
     }
@@ -20,16 +66,16 @@ class User extends Entity<UserProps> {
         return this.props.name;
     }
 
-    get email(): string {
+    get email(): UserEmail {
         return this.props.email;
     }
 
-    get age(): number {
+    get age(): UserAge {
         return this.props.age;
     }
 
-    get passwordHash(): string {
-        return this.props.passwordHash;
+    get password(): UserPassword {
+        return this.props.password;
     }
 
     get createdAt(): Date {
@@ -43,14 +89,4 @@ class User extends Entity<UserProps> {
     get isDeleted(): boolean {
         return this.props.isDeleted;
     }
-
-    constructor(props: UserProps, id?: UniqueEntityID) {
-        super(props, id);
-    }
-
-    public static create(props: UserProps, id?: UniqueEntityID): User {
-        return new User(props, id);
-    }
 }
-
-export default User;
