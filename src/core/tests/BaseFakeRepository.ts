@@ -5,7 +5,7 @@ export default abstract class BaseFakeRepo<T> {
         this._items = [];
     }
 
-    public addFakeItem(t: T): T | undefined {
+    public addFakeItem(t: T): T {
         const { foundedItem } = this.findItem(t);
         if (foundedItem) throw new Error("Fake db says: Y're trying to insert an already existent item");
 
@@ -13,7 +13,7 @@ export default abstract class BaseFakeRepo<T> {
         return t;
     }
 
-    protected updateFakeItem(t: T): T | undefined {
+    protected updateFakeItem(t: T): T {
         const { foundedItem, index } = this.findItem(t);
         if (!foundedItem || !index) throw new Error("Fake db says: Y're trying to update an not existent item");
 

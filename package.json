@@ -12,7 +12,7 @@
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "test": "jest --no-cache",
     "test:dev": "jest --watchAll",
-    "testWithCoverage": "jest --coverage"
+    "test:coverage": "jest --coverage"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.0",

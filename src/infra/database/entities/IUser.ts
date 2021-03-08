@@ -6,7 +6,7 @@ export default interface IUser {
     email: string;
     age: number;
     password: string;
-    createdAt: Date;
-    updatedAt: Date;
-    isDeleted: DefaultIndicador;
+    created_at: Date;
+    updated_at: Date;
+    deleted: DefaultIndicador;
 }

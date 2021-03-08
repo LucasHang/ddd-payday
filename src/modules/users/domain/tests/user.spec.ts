@@ -76,7 +76,7 @@ async function generateUserMocks(params?: { password?: string; email?: string; o
     const userToCreate = {
         name: faker.name.findName(),
         email: emailOrError.value,
-        age: faker.random.number(100),
+        age: 19,
         password: passwordOrError.value,
         ...params?.overwriteProps,
     };
