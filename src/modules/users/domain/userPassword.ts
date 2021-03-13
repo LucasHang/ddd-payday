@@ -23,12 +23,8 @@ export default class UserPassword extends ValueObject<UserPasswordProps> {
         if (!this.isAppropriateLength(password))
             return left(new InvalidParam(`'Senha' deve conter no mínimo ${this.minLength} caracteres`));
 
-        try {
-            const passwordHash = await this.hashPassword(password);
-            return right(new UserPassword({ value: passwordHash }));
-        } catch (_err) {
-            return left(new Unexpected('Falha ao tentar encriptar senha'));
-        }
+        const passwordHash = await this.hashPassword(password);
+        return right(new UserPassword({ value: passwordHash }));
     }
 
     public static build(password: string): Result<InvalidParam, UserPassword> {

@@ -40,10 +40,10 @@ export default class User extends Entity<UserProps> {
         return right(new User(userProps));
     }
 
-    public static build(props: UserProps, id: UniqueEntityID): Result<string, User> {
+    public static build(props: UserProps, id: UniqueEntityID): Result<InvalidParam, User> {
         const guardResult = this.guardValidation(props);
 
-        if (!guardResult.succeeded) return left(guardResult.message as string);
+        if (!guardResult.succeeded) return left(new InvalidParam(guardResult.message as string));
 
         return right(new User(props, id));
     }

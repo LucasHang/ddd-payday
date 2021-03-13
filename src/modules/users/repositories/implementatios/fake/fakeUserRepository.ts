@@ -1,4 +1,4 @@
-import BaseFakeRepo from '@core/tests/BaseFakeRepository';
+import BaseFakeRepo from '@core/infra/BaseFakeRepository';
 import User from '@modules/users/domain/user';
 import { UserMap } from '@modules/users/mappers/userMap';
 import IUser from '@infra/database/entities/IUser';
