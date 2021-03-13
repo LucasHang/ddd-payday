@@ -1,7 +1,7 @@
 import BaseFakeRepo from '@core/tests/BaseFakeRepository';
 import User from '@modules/users/domain/user';
 import { UserMap } from '@modules/users/mappers/userMap';
-import IUser from 'src/infra/database/entities/IUser';
+import IUser from '@infra/database/entities/IUser';
 import IUserRepository from '../../IUserRepository';
 
 export default class FakeUserRepository extends BaseFakeRepo<IUser> implements IUserRepository {

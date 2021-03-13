@@ -1,4 +1,3 @@
-import UserPassword from '@modules/users/domain/userPassword';
 import FakeUserRepository from '@modules/users/repositories/implementatios/fake/fakeUserRepository';
 import faker from 'faker';
 import CreateUserDTO from './CreateUserDTO';

@@ -3,5 +3,5 @@ export default interface UserDTO {
     name: string;
     email: string;
     age: number;
-    createdAt: string; // toISOString()
+    createdAt: string;
 }

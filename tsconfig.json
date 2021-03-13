@@ -8,14 +8,15 @@
     "outDir": "./dist",
     "removeComments": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@core/*": ["./src/core/*"],
-      "@modules/*": ["./src/modules/*"],
-      "@shared/*": ["./src/shared/*"]
+      "@core/*": ["./core/*"],
+      "@infra/*": ["./infra/*"],
+      "@modules/*": ["./modules/*"],
+      "@shared/*": ["./shared/*"]
     }
   }
 }
