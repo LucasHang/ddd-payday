@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
+import { StatusCodes } from 'http-status-codes';
 import UniqueEntityID from '@core/domain/UniqueEntityID';
 import faker from 'faker';
+import { InvalidParam } from '@core/logic/GenericErrors';
 import User from '../user';
 import UserEmail from '../userEmail';
 import UserPassword from '../userPassword';
@@ -47,7 +49,11 @@ describe('User domain', () => {
 
         if (!userOrError.isLeft()) return;
 
-        expect(userOrError.value).toEqual("'Nome' deve ser informado(a)");
+        const error = userOrError.value;
+
+        expect(error).toBeInstanceOf(InvalidParam);
+        expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
+        expect(error.message).toBe("'Nome' deve ser informado(a)");
     });
 
     it('Should build a user with the given props', async () => {

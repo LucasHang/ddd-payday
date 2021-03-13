@@ -1,3 +1,5 @@
+import { InvalidParam } from '@core/logic/GenericErrors';
+import { StatusCodes } from 'http-status-codes';
 import UserAge from '../userAge';
 
 describe('UserAge domain', () => {
@@ -5,7 +7,13 @@ describe('UserAge domain', () => {
         const ageOrError = UserAge.create(UserAge.minAge - 1);
 
         expect(ageOrError.isLeft()).toBeTruthy();
+
         if (!ageOrError.isLeft()) return;
-        expect(ageOrError.value).toEqual(`Idade deve ser no mínimo ${UserAge.minAge} anos`);
+
+        const error = ageOrError.value;
+
+        expect(error).toBeInstanceOf(InvalidParam);
+        expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
+        expect(error.message).toBe(`Idade deve ser no mínimo ${UserAge.minAge} anos`);
     });
 });

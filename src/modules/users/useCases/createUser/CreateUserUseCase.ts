@@ -22,7 +22,7 @@ export default class CreateUserUseCase implements UseCase<CreateUserDTO, Promise
 
         const dtoResult = combine([emailOrError, passwordOrError, ageOrError]);
 
-        if (dtoResult.isLeft()) return left(new InvalidParam(dtoResult.value));
+        if (dtoResult.isLeft()) return left(dtoResult.value);
 
         const password = passwordOrError.value as UserPassword;
         const email = emailOrError.value as UserEmail;
@@ -35,7 +35,7 @@ export default class CreateUserUseCase implements UseCase<CreateUserDTO, Promise
             age,
         });
 
-        if (userOrError.isLeft()) return left(new InvalidParam(userOrError.value));
+        if (userOrError.isLeft()) return left(userOrError.value);
 
         await this.userRepository.insert(userOrError.value);
 

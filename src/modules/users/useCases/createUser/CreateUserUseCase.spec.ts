@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import { InvalidParam } from '@core/logic/GenericErrors';
 import FakeUserRepository from '@modules/users/repositories/implementatios/fake/fakeUserRepository';
 import faker from 'faker';
@@ -51,7 +52,7 @@ describe('CreateUserUseCase', () => {
         const error = createdUserOrError.value;
 
         expect(error).toBeInstanceOf(InvalidParam);
-        expect(error.statusCode).toBe(400);
+        expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(error.message).toBe("'Nome' deve ser informado(a)");
     });
 });

@@ -1,4 +1,6 @@
 /* eslint-disable no-use-before-define */
+import { InvalidParam } from '@core/logic/GenericErrors';
+import { StatusCodes } from 'http-status-codes';
 import UserPassword from '../userPassword';
 
 describe('UserPassword domain', () => {
@@ -9,9 +11,11 @@ describe('UserPassword domain', () => {
 
         if (!passwordOrError.isLeft()) return;
 
-        expect(passwordOrError.value).toEqual(
-            `Senha deve conter no mínimo ${UserPassword.minLength} caracteres`,
-        );
+        const error = passwordOrError.value;
+
+        expect(error).toBeInstanceOf(InvalidParam);
+        expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
+        expect(error.message).toBe(`Senha deve conter no mínimo ${UserPassword.minLength} caracteres`);
     });
 });
 

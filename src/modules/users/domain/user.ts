@@ -1,5 +1,6 @@
 import Entity from '@core/domain/Entity';
 import UniqueEntityID from '@core/domain/UniqueEntityID';
+import { InvalidParam } from '@core/logic/GenericErrors';
 import Guard, { IGuardResult } from '@core/logic/Guard';
 import { left, Result, right } from '@core/logic/Result';
 import UserAge from './userAge';
@@ -24,10 +25,10 @@ export default class User extends Entity<UserProps> {
         super(props, id);
     }
 
-    public static create(props: ToCreateUserProps): Result<string, User> {
+    public static create(props: ToCreateUserProps): Result<InvalidParam, User> {
         const guardResult = this.guardValidation(props);
 
-        if (!guardResult.succeeded) return left(guardResult.message as string);
+        if (!guardResult.succeeded) return left(new InvalidParam(guardResult.message as string));
 
         const userProps: UserProps = {
             ...props,
