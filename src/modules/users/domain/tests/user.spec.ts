@@ -40,7 +40,7 @@ describe('User domain', () => {
         expect(isEmailEqual).toBeTruthy();
     });
 
-    it('Should return error when required props were not present', async () => {
+    it('Should return InvalidParam when required props were not present', async () => {
         const { userToCreate } = await generateUserMocks({ overwriteProps: { name: null } });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const userOrError = User.create(userToCreate as any);

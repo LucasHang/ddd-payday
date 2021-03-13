@@ -21,7 +21,7 @@ export default class UserPassword extends ValueObject<UserPasswordProps> {
         if (!propsResult.succeeded) return left(new InvalidParam(propsResult.message as string));
 
         if (!this.isAppropriateLength(password))
-            return left(new InvalidParam(`Senha deve conter no mínimo ${this.minLength} caracteres`));
+            return left(new InvalidParam(`'Senha' deve conter no mínimo ${this.minLength} caracteres`));
 
         try {
             const passwordHash = await this.hashPassword(password);
@@ -57,7 +57,7 @@ export default class UserPassword extends ValueObject<UserPasswordProps> {
         });
     }
 
-    private static hashPassword(password: string): Promise<string> {
+    public static hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
 
