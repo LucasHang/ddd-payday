@@ -7,15 +7,14 @@ export default class CreateUserController extends BaseController {
         super();
     }
 
-    public async executeImplementation(): Promise<void> {
+    public async executeImplementation(): Promise<void | any> {
         const dto: CreateUserDTO = this.req.body as CreateUserDTO;
         const result = await this.useCase.execute(dto);
 
         if (result.isLeft()) {
-            BaseController.jsonResponse(this.res, result.value.statusCode, result.value.message);
-            return;
+            return BaseController.jsonResponse(this.res, result.value.statusCode, result.value.message);
         }
 
-        this.ok(this.res, result.value);
+        return this.ok(this.res, result.value);
     }
 }

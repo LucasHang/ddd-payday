@@ -9,14 +9,14 @@ export default abstract class BaseController {
 
     protected abstract executeImplementation(): Promise<void | any>;
 
-    public async execute(req: Request, res: Response): Promise<void> {
+    public async execute(req: Request, res: Response): Promise<void | any> {
         this.req = req;
         this.res = res;
 
         try {
-            await this.executeImplementation();
+            return await this.executeImplementation();
         } catch (error) {
-            this.fail(error);
+            return this.fail(error);
         }
     }
 
