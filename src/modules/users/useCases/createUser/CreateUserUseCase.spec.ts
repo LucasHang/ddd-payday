@@ -1,12 +1,13 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import axios from 'axios';
+import { Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { InvalidParam } from '@core/logic/GenericErrors';
 import FakeUserRepository from '@modules/users/repositories/implementatios/fake/fakeUserRepository';
 import faker from 'faker';
 import UserAge from '@modules/users/domain/userAge';
+import UserPassword from '@modules/users/domain/userPassword';
 import CreateUserDTO from './CreateUserDTO';
 import CreateUserUseCase from './CreateUserUseCase';
+import { createUserController } from '.';
 
 let useCase: CreateUserUseCase;
 
@@ -79,18 +80,37 @@ describe('CreateUserUseCase', () => {
         expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(error.message).toBe("'Idade' deve ser no mínimo 16 anos");
     });
+});
 
+describe('CreateUserController', () => {
     it('Should return Internal server error if implementation throws', async () => {
-        const toCreateUser: CreateUserDTO = {
-            name: faker.name.findName(),
-            email: faker.internet.email(),
-            age: 19,
-            password: faker.internet.password(),
-        };
+        jest.spyOn(UserPassword, 'hashPassword').mockImplementationOnce(() => {
+            return new Promise((_resolve, reject) => reject(new Error()));
+        });
 
-        const response = await axios.post('http://localhost:3333/v1/users', toCreateUser);
-        console.log('response ', response);
+        const mockedRequest = {
+            body: {
+                name: faker.name.findName(),
+                email: faker.internet.email(),
+                age: 19,
+                password: faker.internet.password(),
+            },
+        } as Request;
 
-        expect('banana').toBe('banana');
+        const mockedResponse = {
+            json(data: any) {
+                mockedResponse.data = data;
+                return mockedResponse;
+            },
+            status(code: number) {
+                mockedResponse.status = code;
+                return mockedResponse;
+            },
+        } as any;
+
+        const response = await createUserController.execute(mockedRequest, mockedResponse);
+
+        expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+        expect(response.data.message).toBe('Não foi possível realizar a requisição');
     });
 });
