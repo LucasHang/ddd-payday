@@ -17,4 +17,21 @@ describe('UserPassword domain', () => {
         expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(error.message).toBe(`'Senha' deve conter no mínimo ${UserPassword.minLength} caracteres`);
     });
+
+    it('Should return a instance of UserPassword if a valid password was provided', async () => {
+        const toCreatePassword = '123456';
+
+        const passwordOrError = await UserPassword.create(toCreatePassword);
+
+        expect(passwordOrError.isRight()).toBeTruthy();
+
+        if (!passwordOrError.isRight()) return;
+
+        const password = passwordOrError.value;
+
+        expect(password).toBeInstanceOf(UserPassword);
+
+        const isPasswordEqual = await password.comparePassword(toCreatePassword);
+        expect(isPasswordEqual).toBeTruthy();
+    });
 });
