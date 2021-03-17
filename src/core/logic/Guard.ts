@@ -21,7 +21,7 @@ export default class Guard {
 
     public static againstNullOrUndefined(argument: unknown, argumentName: string): IGuardResult {
         if (argument === null || argument === undefined) {
-            return { succeeded: false, message: `'${argumentName}' deve ser informado(a)` };
+            return { succeeded: false, message: `'${argumentName}' should be informed` };
         }
         return { succeeded: true };
     }
@@ -48,16 +48,16 @@ export default class Guard {
         }
         return {
             succeeded: false,
-            message: `'${argumentName}' não está dentro dos valores permitidos em ${validValues.join(
+            message: `'${argumentName}' is not in the allowed values of ${validValues.join(
                 ', ',
-            )}. Recebido "${value}".`,
+            )}. Got "${value}".`,
         };
     }
 
     public static inRange(num: number, min: number, max: number, argumentName: string): IGuardResult {
         const isInRange = num >= min && num <= max;
         if (!isInRange) {
-            return { succeeded: false, message: `${argumentName} não está entre ${min} e ${max}.` };
+            return { succeeded: false, message: `${argumentName} is not between ${min} and ${max}.` };
         }
         return { succeeded: true };
     }
@@ -70,7 +70,7 @@ export default class Guard {
         }
 
         if (failingResult) {
-            return { succeeded: false, message: `${argumentName} não está dentro do permitido.` };
+            return { succeeded: false, message: `${argumentName} is not in the allowed range.` };
         }
         return { succeeded: true };
     }

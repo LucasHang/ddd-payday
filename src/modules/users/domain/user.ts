@@ -50,10 +50,10 @@ export default class User extends Entity<UserProps> {
 
     private static guardValidation(props: UserProps | ToCreateUserProps): IGuardResult {
         const guardedProps = [
-            { argument: props.name, argumentName: 'Nome' },
+            { argument: props.name, argumentName: 'Name' },
             { argument: props.email, argumentName: 'E-mail' },
-            { argument: props.age, argumentName: 'Idade' },
-            { argument: props.password, argumentName: 'Senha' },
+            { argument: props.age, argumentName: 'Age' },
+            { argument: props.password, argumentName: 'Password' },
         ];
 
         return Guard.againstNullOrUndefinedBulk(guardedProps);
