@@ -16,8 +16,8 @@ describe('User domain', () => {
             password,
             email,
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const userOrError = User.create(userToCreate as any);
+
+        const userOrError = User.create(userToCreate);
 
         expect(userOrError.isRight()).toBeTruthy();
 
