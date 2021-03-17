@@ -1,1 +1,3 @@
-import '@infra/http/server';
+import initServer from '@infra/http/server';
+
+initServer();
