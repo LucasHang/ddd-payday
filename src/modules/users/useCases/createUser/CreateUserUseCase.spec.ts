@@ -54,7 +54,7 @@ describe('CreateUserUseCase', () => {
 
         expect(error).toBeInstanceOf(InvalidParam);
         expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
-        expect(error.message).toBe("'Nome' deve ser informado(a)");
+        expect(error.message).toBe("'Name' should be informed");
     });
 
     it(`Should return InvalidParam if age is under ${UserAge.minAge}`, async () => {
