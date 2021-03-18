@@ -1,4 +1,4 @@
-import FakeUserRepository from '@modules/users/repositories/implementatios/fake/fakeUserRepository';
+import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
 import CreateUserController from './CreateUserController';
 import CreateUserUseCase from './CreateUserUseCase';
 

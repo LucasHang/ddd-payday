@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { InvalidParam } from '@core/logic/GenericErrors';
-import FakeUserRepository from '@modules/users/repositories/implementatios/fake/fakeUserRepository';
+import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
 import faker from 'faker';
 import UserAge from '@modules/users/domain/userAge';
 import CreateUserDTO from './CreateUserDTO';
