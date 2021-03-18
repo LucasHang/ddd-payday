@@ -20,8 +20,8 @@ export default class UserPassword extends ValueObject<UserPasswordProps> {
 
         if (!propsResult.succeeded) return left(new InvalidParam(propsResult.message as string));
 
-        if (!this.isAppropriateLength(password))
-            return left(new InvalidParam(`'Password' length should be at least ${this.minLength} chars`));
+        const appropriateOrError = this.validateAppropriateLength(password);
+        if (appropriateOrError.isLeft()) return left(appropriateOrError.value);
 
         const passwordHash = await this.hashPassword(password);
         return right(new UserPassword({ value: passwordHash }));
@@ -57,8 +57,10 @@ export default class UserPassword extends ValueObject<UserPasswordProps> {
         return bcrypt.hash(password, 10);
     }
 
-    private static isAppropriateLength(password: string): boolean {
-        return password.length >= this.minLength;
+    private static validateAppropriateLength(password: string): Result<InvalidParam, null> {
+        return password.length >= this.minLength
+            ? right(null)
+            : left(new InvalidParam(`'Password' length should be at least ${this.minLength} chars`));
     }
 
     get value(): string {

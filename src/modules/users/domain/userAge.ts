@@ -19,8 +19,8 @@ export default class UserAge extends ValueObject<UserAgeProps> {
 
         if (!guardResult.succeeded) return left(new InvalidParam(guardResult.message as string));
 
-        if (!this.isAppropriateAge(age))
-            return left(new InvalidParam(`'Age' should be greater than or equal ${this.minAge} years`));
+        const appropriateOrError = this.validateAppropriateAge(age);
+        if (appropriateOrError.isLeft()) return left(appropriateOrError.value);
 
         return right(new UserAge({ value: age }));
     }
@@ -29,8 +29,10 @@ export default class UserAge extends ValueObject<UserAgeProps> {
         return this.create(age);
     }
 
-    private static isAppropriateAge(age: number): boolean {
-        return age >= this.minAge;
+    private static validateAppropriateAge(age: number): Result<InvalidParam, null> {
+        return age >= this.minAge
+            ? right(null)
+            : left(new InvalidParam(`'Age' should be greater than or equal ${this.minAge} years`));
     }
 
     get value(): number {
