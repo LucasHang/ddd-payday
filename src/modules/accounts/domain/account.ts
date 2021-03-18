@@ -3,10 +3,11 @@ import UniqueEntityID from '@core/domain/UniqueEntityID';
 import { InvalidParam } from '@core/logic/GenericErrors';
 import Guard, { IGuardResult } from '@core/logic/Guard';
 import { left, Result, right } from '@core/logic/Result';
+import AccountBalance from './accountBalance';
 
 interface ToCreateAccountProps {
     userId: UniqueEntityID;
-    balance: number;
+    balance: AccountBalance;
 }
 
 type AccountProps = ToCreateAccountProps & {
@@ -58,7 +59,7 @@ export default class Account extends Entity<AccountProps> {
         return this.props.userId;
     }
 
-    get balance(): number {
+    get balance(): AccountBalance {
         return this.props.balance;
     }
 
