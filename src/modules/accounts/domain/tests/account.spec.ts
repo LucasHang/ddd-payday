@@ -4,6 +4,7 @@ import { InvalidParam } from '@core/logic/GenericErrors';
 import faker from 'faker';
 import { StatusCodes } from 'http-status-codes';
 import Account from '../account';
+import AccountBalance from '../accountBalance';
 
 describe('Account domain', () => {
     it('Should create an account with the given props plus the default setted ones', () => {
@@ -19,7 +20,7 @@ describe('Account domain', () => {
 
         expect(accountDomain).toMatchObject({ ...accountToCreate, ...accountDefaultProps });
         expect(accountDomain.id).toBeInstanceOf(UniqueEntityID);
-        expect(accountDomain.balance).toBeTruthy();
+        expect(accountDomain.balance).toBeInstanceOf(AccountBalance);
         expect(accountDomain.createdAt).toBeInstanceOf(Date);
         expect(accountDomain.updatedAt).toBeInstanceOf(Date);
     });
@@ -39,13 +40,38 @@ describe('Account domain', () => {
         expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
         expect(error.message).toBe("'Balance' should be informed");
     });
+
+    it('Should build an account with the given props', async () => {
+        const { accountToCreate, accountDefaultProps } = await generateAccountMocks();
+
+        const account = {
+            ...accountToCreate,
+            ...accountDefaultProps,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+        const accountId = new UniqueEntityID();
+
+        const accountOrError = Account.build(account, accountId);
+
+        expect(accountOrError.isRight()).toBeTruthy();
+
+        if (!accountOrError.isRight()) return;
+
+        const userDomain = accountOrError.value;
+
+        expect(userDomain).toMatchObject(account);
+        expect(userDomain.id).toEqual(accountId);
+    });
 });
 
 function generateAccountMocks(params?: { overwriteProps?: any }) {
+    const balanceOrError = AccountBalance.create(faker.random.float({ min: 0, precision: 2 }));
+
     return {
         accountToCreate: {
             userId: new UniqueEntityID(),
-            balance: faker.random.float(),
+            balance: balanceOrError.value,
             ...params?.overwriteProps,
         },
         accountDefaultProps: {
