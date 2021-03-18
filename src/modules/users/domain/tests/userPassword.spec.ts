@@ -15,7 +15,7 @@ describe('UserPassword domain', () => {
 
         expect(error).toBeInstanceOf(InvalidParam);
         expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
-        expect(error.message).toBe(`'Senha' deve conter no mínimo ${UserPassword.minLength} caracteres`);
+        expect(error.message).toBe("'Password' length should be at least 6 chars");
     });
 
     it('Should return a instance of UserPassword if a valid password was provided', async () => {

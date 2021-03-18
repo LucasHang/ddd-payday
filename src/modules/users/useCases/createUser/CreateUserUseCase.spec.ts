@@ -75,6 +75,6 @@ describe('CreateUserUseCase', () => {
 
         expect(error).toBeInstanceOf(InvalidParam);
         expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
-        expect(error.message).toBe("'Idade' deve ser no mínimo 16 anos");
+        expect(error.message).toBe("'Age' should be greater than or equal 16 years");
     });
 });

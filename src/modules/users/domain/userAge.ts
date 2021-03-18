@@ -20,7 +20,7 @@ export default class UserAge extends ValueObject<UserAgeProps> {
         if (!guardResult.succeeded) return left(new InvalidParam(guardResult.message as string));
 
         if (!this.isAppropriateAge(age))
-            return left(new InvalidParam(`'Idade' deve ser no mínimo ${this.minAge} anos`));
+            return left(new InvalidParam(`'Age' should be greater than or equal ${this.minAge} years`));
 
         return right(new UserAge({ value: age }));
     }

@@ -21,7 +21,7 @@ export default class UserPassword extends ValueObject<UserPasswordProps> {
         if (!propsResult.succeeded) return left(new InvalidParam(propsResult.message as string));
 
         if (!this.isAppropriateLength(password))
-            return left(new InvalidParam(`'Senha' deve conter no mínimo ${this.minLength} caracteres`));
+            return left(new InvalidParam(`'Password' length should be at least ${this.minLength} chars`));
 
         const passwordHash = await this.hashPassword(password);
         return right(new UserPassword({ value: passwordHash }));
