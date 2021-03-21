@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
     "paths": {
       "@core/*": ["./core/*"],
       "@infra/*": ["./infra/*"],
