@@ -3,10 +3,7 @@ import { InvalidParam } from '@core/logic/GenericErrors';
 import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
 import FakeAccountRepository from '@modules/accounts/repositories/implementations/fake/fakeAccountRepository';
 import faker from 'faker';
-import User from '@modules/users/domain/user';
-import UserPassword from '@modules/users/domain/userPassword';
-import UserEmail from '@modules/users/domain/userEmail';
-import UserAge from '@modules/users/domain/userAge';
+import { User, UserAge, UserEmail, UserPassword } from '@modules/users/domain';
 import CreateAccountUseCase from './CreateAccountUseCase';
 import CreateAccountDTO from './CreateAccountDTO';
 
