@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { InvalidParam } from '@core/logic/GenericErrors';
 import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
+import FakeAccountRepository from '@modules/accounts/repositories/implementations/fake/fakeAccountRepository';
 import faker from 'faker';
 import UserAge from '@modules/users/domain/userAge';
 import CreateUserDTO from './CreateUserDTO';
@@ -9,11 +10,13 @@ import CreateUserUseCase from './CreateUserUseCase';
 let useCase: CreateUserUseCase;
 
 let fakeUserRepository: FakeUserRepository;
+let fakeAccountRepository: FakeAccountRepository;
 
 describe('CreateUserUseCase', () => {
     beforeEach(() => {
         fakeUserRepository = new FakeUserRepository();
-        useCase = new CreateUserUseCase(fakeUserRepository);
+        fakeAccountRepository = new FakeAccountRepository();
+        useCase = new CreateUserUseCase(fakeUserRepository, fakeAccountRepository);
     });
 
     it('Should be able to create an user when valid params were provided', async () => {
@@ -35,6 +38,16 @@ describe('CreateUserUseCase', () => {
         expect(user.id).toBeTruthy();
         expect(user.createdAt).toBeTruthy();
         expect(user.email).toEqual(toCreateUser.email);
+
+        const accountOrError = await fakeAccountRepository.findByUserOrError(user.id);
+
+        expect(accountOrError.isRight()).toBeTruthy();
+
+        if (!accountOrError.isRight()) return;
+
+        const account = accountOrError.value;
+
+        expect(account.balance.value).toBe(0);
     });
 
     it('Should return InvalidParam if name was not provided', async () => {
