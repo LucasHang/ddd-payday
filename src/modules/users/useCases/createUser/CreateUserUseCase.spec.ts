@@ -4,10 +4,12 @@ import FakeUserRepository from '@modules/users/repositories/implementations/fake
 import FakeAccountRepository from '@modules/accounts/repositories/implementations/fake/fakeAccountRepository';
 import faker from 'faker';
 import UserAge from '@modules/users/domain/userAge';
+import CreateAccountUseCase from '@modules/accounts/useCases/createAccount/CreateAccountUseCase';
 import CreateUserDTO from './CreateUserDTO';
 import CreateUserUseCase from './CreateUserUseCase';
 
 let useCase: CreateUserUseCase;
+let createAccountUseCase: CreateAccountUseCase;
 
 let fakeUserRepository: FakeUserRepository;
 let fakeAccountRepository: FakeAccountRepository;
@@ -16,7 +18,9 @@ describe('CreateUserUseCase', () => {
     beforeEach(() => {
         fakeUserRepository = new FakeUserRepository();
         fakeAccountRepository = new FakeAccountRepository();
-        useCase = new CreateUserUseCase(fakeUserRepository, fakeAccountRepository);
+
+        createAccountUseCase = new CreateAccountUseCase(fakeAccountRepository, fakeUserRepository);
+        useCase = new CreateUserUseCase(fakeUserRepository, createAccountUseCase);
     });
 
     it('Should be able to create an user when valid params were provided', async () => {
