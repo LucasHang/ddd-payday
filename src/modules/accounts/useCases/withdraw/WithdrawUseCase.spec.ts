@@ -3,7 +3,7 @@ import FakeAccountRepository from '@modules/accounts/repositories/implementation
 import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
 import { User, UserAge, UserEmail, UserPassword } from '@modules/users/domain';
 import { Account, AccountBalance } from '@modules/accounts/domain';
-import ClassValidator from '@shared/validators/implementations/ClassValidator';
+import MyClassValidator from '@shared/validators/implementations/MyClassValidator';
 import IValidator from '@shared/validators/IValidator';
 import WithdrawUseCase from './WithdrawUseCase';
 import WithdrawDTO from './WithdrawDTO';
@@ -12,7 +12,7 @@ let useCase: WithdrawUseCase;
 
 let fakeUserRepository: FakeUserRepository;
 let fakeAccountRepository: FakeAccountRepository;
-let classValidator: IValidator;
+let myClassValidator: IValidator;
 
 let accountId: string;
 
@@ -20,7 +20,7 @@ describe('WithdrawUseCase', () => {
     beforeEach(async () => {
         fakeUserRepository = new FakeUserRepository();
         fakeAccountRepository = new FakeAccountRepository();
-        classValidator = new ClassValidator(WithdrawDTO);
+        myClassValidator = new MyClassValidator(() => new WithdrawDTO());
 
         const userPassword = await UserPassword.create(faker.internet.password());
         const userEmail = UserEmail.create(faker.internet.email());
@@ -44,15 +44,21 @@ describe('WithdrawUseCase', () => {
 
         accountId = createdAccount.id.toString();
 
-        useCase = new WithdrawUseCase(fakeAccountRepository, classValidator);
+        useCase = new WithdrawUseCase(fakeAccountRepository, myClassValidator);
     });
 
     it('Should be able to withdraw if valid params were provided', async () => {
-        await useCase.execute({
+        const withdrawOrError = await useCase.execute({
             accountId,
-            value: -1,
-        });
+            value: 10,
+        } as any);
 
-        expect('banana').toBe('banana');
+        expect(withdrawOrError.isRight()).toBeTruthy();
+
+        if (!withdrawOrError.isRight()) return;
+
+        const account = withdrawOrError.value;
+
+        expect(account).toBeTruthy();
     });
 });
