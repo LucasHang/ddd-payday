@@ -1,9 +1,9 @@
-import { IsNumber, Min } from 'class-validator';
+import { Min, Required } from '@core/logic/GuardDecorators';
 
 export default class WithdrawDTO {
-    accountId!: string;
+    @Required({ argumentName: 'Account' })
+    accountId: string;
 
-    @IsNumber(undefined, { message: "'Value' should be a number" })
-    @Min(0, { message: "'Value' should be equal to or greater than 0" })
-    value!: number;
+    @Min(0, { argumentName: 'Value' })
+    value: number;
 }

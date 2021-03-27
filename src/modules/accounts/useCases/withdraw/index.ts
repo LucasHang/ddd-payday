@@ -1,8 +1,11 @@
 import FakeAccountRepository from '@modules/accounts/repositories/implementations/fake/fakeAccountRepository';
-import ClassValidator from '@shared/validators/implementations/ClassValidator';
+import MyClassValidator from '@shared/validators/implementations/MyClassValidator';
 import WithdrawDTO from './WithdrawDTO';
 import WithdrawUseCase from './WithdrawUseCase';
 
-const withDrawUseCase = new WithdrawUseCase(new FakeAccountRepository(), new ClassValidator(WithdrawDTO));
+const withDrawUseCase = new WithdrawUseCase(
+    new FakeAccountRepository(),
+    new MyClassValidator(() => new WithdrawDTO()),
+);
 
 export { withDrawUseCase };
