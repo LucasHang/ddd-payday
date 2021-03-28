@@ -89,6 +89,6 @@ describe('CreateAccountUseCase', () => {
 
         expect(error).toBeInstanceOf(InvalidParam);
         expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
-        expect(error.message).toBe("'Balance' should be equal or greater than 0");
+        expect(error.message).toBe("'Balance' should be equal to or greater than 0");
     });
 });

@@ -3,24 +3,27 @@ import FakeAccountRepository from '@modules/accounts/repositories/implementation
 import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
 import { User, UserAge, UserEmail, UserPassword } from '@modules/users/domain';
 import { Account, AccountBalance } from '@modules/accounts/domain';
-import MyClassValidator from '@shared/validators/implementations/MyClassValidator';
+import MyDtoValidator from '@shared/validators/implementations/MyDtoValidator';
 import IValidator from '@shared/validators/IValidator';
+import { InvalidParam } from '@core/logic/GenericErrors';
+import { StatusCodes } from 'http-status-codes';
 import WithdrawUseCase from './WithdrawUseCase';
-import WithdrawDTO from './WithdrawDTO';
+import WithdrawDTOValidation from './WithdrawDTOValidation';
 
 let useCase: WithdrawUseCase;
 
 let fakeUserRepository: FakeUserRepository;
 let fakeAccountRepository: FakeAccountRepository;
-let myClassValidator: IValidator;
+let myDtoValidator: IValidator;
 
 let accountId: string;
+const balance = 100;
 
 describe('WithdrawUseCase', () => {
     beforeEach(async () => {
         fakeUserRepository = new FakeUserRepository();
         fakeAccountRepository = new FakeAccountRepository();
-        myClassValidator = new MyClassValidator(() => new WithdrawDTO());
+        myDtoValidator = new MyDtoValidator(WithdrawDTOValidation);
 
         const userPassword = await UserPassword.create(faker.internet.password());
         const userEmail = UserEmail.create(faker.internet.email());
@@ -37,21 +40,57 @@ describe('WithdrawUseCase', () => {
 
         const account = Account.create({
             userId: createdUser.id,
-            balance: AccountBalance.create(0).value as AccountBalance,
+            balance: AccountBalance.create(balance).value as AccountBalance,
         }).value as Account;
 
         const createdAccount = await fakeAccountRepository.insert(account);
 
         accountId = createdAccount.id.toString();
 
-        useCase = new WithdrawUseCase(fakeAccountRepository, myClassValidator);
+        useCase = new WithdrawUseCase(fakeAccountRepository, myDtoValidator);
+    });
+
+    it('Should return InvalidParam if accountId was not provided', async () => {
+        const withdrawOrError = await useCase.execute({
+            // accountId,
+            value: -1,
+        } as any);
+
+        expect(withdrawOrError.isLeft()).toBeTruthy();
+
+        if (!withdrawOrError.isLeft()) return;
+
+        const error = withdrawOrError.value;
+
+        expect(error).toBeInstanceOf(InvalidParam);
+        expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
+        expect(error.message).toBe('Account should be informed');
+    });
+
+    it('Should return InvalidParam if invalid value was provided', async () => {
+        const withdrawOrError = await useCase.execute({
+            accountId,
+            value: -1,
+        } as any);
+
+        expect(withdrawOrError.isLeft()).toBeTruthy();
+
+        if (!withdrawOrError.isLeft()) return;
+
+        const error = withdrawOrError.value;
+
+        expect(error).toBeInstanceOf(InvalidParam);
+        expect(error.statusCode).toBe(StatusCodes.BAD_REQUEST);
+        expect(error.message).toBe('Value should be equal to or greater than 0');
     });
 
     it('Should be able to withdraw if valid params were provided', async () => {
+        const value = 10;
+
         const withdrawOrError = await useCase.execute({
             accountId,
-            value: 10,
-        } as any);
+            value,
+        });
 
         expect(withdrawOrError.isRight()).toBeTruthy();
 
@@ -60,5 +99,7 @@ describe('WithdrawUseCase', () => {
         const account = withdrawOrError.value;
 
         expect(account).toBeTruthy();
+        expect(account.id).toBe(accountId);
+        expect(account.balance).toBe(balance - value);
     });
 });
