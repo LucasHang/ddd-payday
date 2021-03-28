@@ -10,7 +10,7 @@ export default class FakeUserRepository extends BaseFakeRepo<IUser> implements I
     public async insert(user: User): Promise<User> {
         const toInsertUser = UserMap.toPersistence(user);
 
-        const insertedUser = this.addFakeItem(toInsertUser);
+        const insertedUser = this.addFakeItem(toInsertUser as IUser);
 
         return UserMap.toDomain(insertedUser);
     }

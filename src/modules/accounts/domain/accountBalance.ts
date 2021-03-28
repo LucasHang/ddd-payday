@@ -34,7 +34,7 @@ export default class AccountBalance extends ValueObject<AccountBalanceProps> {
     private static validateAppropriateBalance(balance: number): Result<InvalidParam, null> {
         return balance >= 0
             ? right(null)
-            : left(new InvalidParam("'Balance' should be equal or greater than 0"));
+            : left(new InvalidParam("'Balance' should be equal to or greater than 0"));
     }
 
     get value(): number {

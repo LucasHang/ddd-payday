@@ -1,3 +1,5 @@
+import { UpdatePartial } from '@shared/utils/types';
+
 export default abstract class BaseFakeRepo<T> {
     protected _items: T[];
 
@@ -13,9 +15,11 @@ export default abstract class BaseFakeRepo<T> {
         return t;
     }
 
-    protected updateFakeItem(t: T): T {
+    protected updateFakeItem(t: UpdatePartial<T>): T {
         const { foundedItem, index } = this.findItem(t);
-        if (!foundedItem || !index) throw new Error("Fake db says: Y're trying to update an not existent item");
+
+        if (!foundedItem || (!index && index !== 0))
+            throw new Error("Fake db says: Y're trying to update an not existent item");
 
         const updatedItem = { ...foundedItem, ...t };
 
@@ -24,11 +28,11 @@ export default abstract class BaseFakeRepo<T> {
         return updatedItem;
     }
 
-    public removeFakeItem(t: T): void {
+    public removeFakeItem(t: UpdatePartial<T>): void {
         this._items = this._items.filter(item => !this.compareFakeItems(item, t));
     }
 
-    protected findItem(t: T): { foundedItem: T | undefined; index: number | undefined } {
+    protected findItem(t: T | UpdatePartial<T>): { foundedItem: T | undefined; index: number | undefined } {
         let index;
 
         const foundedItem = this._items.find((item, i) => {
@@ -42,5 +46,5 @@ export default abstract class BaseFakeRepo<T> {
         return { foundedItem, index };
     }
 
-    abstract compareFakeItems(a: T, b: T): boolean;
+    abstract compareFakeItems(a: T, b: T | UpdatePartial<T>): boolean;
 }

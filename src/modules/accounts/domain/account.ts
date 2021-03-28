@@ -63,6 +63,10 @@ export default class Account extends Entity<AccountProps> {
         return this.props.balance;
     }
 
+    set balance(newBalance: AccountBalance) {
+        this.props.balance = newBalance;
+    }
+
     get createdAt(): Date {
         return this.props.createdAt;
     }

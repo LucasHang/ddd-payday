@@ -1,6 +1,7 @@
 import UniqueEntityID from '@core/domain/UniqueEntityID';
 import { booleanAsDefaultIndicator, defaultIndicatorAsBoolean } from '@shared/infra/database/enums';
 import IUser from '@infra/database/entities/IUser';
+import { UpdatePartial } from '@shared/utils/types';
 import User from '../domain/user';
 import UserAge from '../domain/userAge';
 import UserEmail from '../domain/userEmail';
@@ -8,16 +9,16 @@ import UserPassword from '../domain/userPassword';
 import UserDTO from '../dtos/userDTO';
 
 export class UserMap {
-    public static toPersistence(user: User): IUser {
+    public static toPersistence(user: UpdatePartial<User>): UpdatePartial<IUser> {
         return {
             id: user.id.toString(),
             name: user.name,
-            email: user.email.value,
-            age: user.age.value,
-            password: user.password.value,
+            email: user.email?.value,
+            age: user.age?.value,
+            password: user.password?.value,
             created_at: user.createdAt,
             updated_at: user.updatedAt,
-            deleted: booleanAsDefaultIndicator(user.isDeleted),
+            deleted: booleanAsDefaultIndicator(!!user.isDeleted),
         };
     }
 

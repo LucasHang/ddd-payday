@@ -1,19 +1,20 @@
 import UniqueEntityID from '@core/domain/UniqueEntityID';
 import { booleanAsDefaultIndicator, defaultIndicatorAsBoolean } from '@shared/infra/database/enums';
 import IAccount from '@infra/database/entities/IAccount';
+import { UpdatePartial } from '@shared/utils/types';
 import Account from '../domain/account';
 import AccountBalance from '../domain/accountBalance';
 import AccountDTO from '../dtos/accountDTO';
 
 export class AccountMap {
-    public static toPersistence(account: Account): IAccount {
+    public static toPersistence(account: UpdatePartial<Account>): UpdatePartial<IAccount> {
         return {
             id: account.id.toString(),
-            user_id: account.userId.toString(),
-            balance: account.balance.value,
+            user_id: account.userId?.toString(),
+            balance: account.balance?.value,
             created_at: account.createdAt,
             updated_at: account.updatedAt,
-            deleted: booleanAsDefaultIndicator(account.isDeleted),
+            deleted: booleanAsDefaultIndicator(!!account.isDeleted),
         };
     }
 
