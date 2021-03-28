@@ -1,9 +1,4 @@
-import { Min, Required } from '@core/logic/GuardDecorators';
-
-export default class WithdrawDTO {
-    @Required({ argumentName: 'Account' })
+export default interface WithdrawDTO {
     accountId: string;
-
-    @Min(0, { argumentName: 'Value' })
     value: number;
 }
