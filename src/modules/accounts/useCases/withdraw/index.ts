@@ -2,10 +2,13 @@ import FakeAccountRepository from '@modules/accounts/repositories/implementation
 import MyDtoValidator from '@shared/validators/implementations/MyDtoValidator';
 import WithdrawUseCase from './WithdrawUseCase';
 import WithdrawDTOValidation from './WithdrawDTOValidation';
+import WithdrawController from './WithdrawController';
 
 const withDrawUseCase = new WithdrawUseCase(
     new FakeAccountRepository(),
     new MyDtoValidator(WithdrawDTOValidation),
 );
 
-export { withDrawUseCase };
+const withdrawController = new WithdrawController(withDrawUseCase);
+
+export { withDrawUseCase, withdrawController };
