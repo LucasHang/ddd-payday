@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import faker from 'faker';
 import { Request } from 'express';
 import { StatusCodes } from 'http-status-codes';

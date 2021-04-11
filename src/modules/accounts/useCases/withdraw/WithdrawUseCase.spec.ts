@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import faker from 'faker';
 import FakeAccountRepository from '@modules/accounts/repositories/implementations/fake/fakeAccountRepository';
 import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
@@ -14,6 +15,7 @@ let useCase: WithdrawUseCase;
 
 let fakeUserRepository: FakeUserRepository;
 let fakeAccountRepository: FakeAccountRepository;
+
 let myDtoValidator: IValidator;
 
 let accountId: string;
@@ -27,7 +29,7 @@ describe('WithdrawUseCase', () => {
 
         const userPassword = await UserPassword.create(faker.internet.password());
         const userEmail = UserEmail.create(faker.internet.email());
-        const userAge = UserAge.create(faker.random.number({ min: 16, max: 100 }));
+        const userAge = UserAge.create(faker.datatype.number({ min: 16, max: 100 }));
 
         const user = User.create({
             name: faker.name.findName(),

@@ -21,7 +21,7 @@ describe('CreateAccountUseCase', () => {
 
         const userPassword = await UserPassword.create(faker.internet.password());
         const userEmail = UserEmail.create(faker.internet.email());
-        const userAge = UserAge.create(faker.random.number({ min: 16, max: 100 }));
+        const userAge = UserAge.create(faker.datatype.number({ min: 16, max: 100 }));
 
         const user = User.create({
             name: faker.name.findName(),
@@ -39,7 +39,7 @@ describe('CreateAccountUseCase', () => {
     it('Should be able to create an account when valid params were provided', async () => {
         const toCreateAccount: CreateAccountDTO = {
             userId,
-            balance: faker.random.float({ min: 0, precision: 2 }),
+            balance: faker.datatype.float({ min: 0, precision: 2 }),
         };
 
         const createdAccountOrError = await useCase.execute(toCreateAccount);
@@ -57,7 +57,7 @@ describe('CreateAccountUseCase', () => {
 
     it('Should return InvalidParam if userId was not provided', async () => {
         const toCreateAccount: any = {
-            balance: faker.random.float({ min: 0, precision: 2 }),
+            balance: faker.datatype.float({ min: 0, precision: 2 }),
         };
 
         const createdAccountOrError = await useCase.execute(toCreateAccount);

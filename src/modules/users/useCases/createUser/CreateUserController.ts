@@ -7,6 +7,7 @@ export default class CreateUserController extends BaseController {
         super();
     }
 
+    // @Transaction
     public async executeImplementation(): Promise<void | any> {
         const dto: CreateUserDTO = this.req.body as CreateUserDTO;
         const result = await this.useCase.execute(dto);

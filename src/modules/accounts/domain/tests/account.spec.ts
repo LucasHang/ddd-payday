@@ -66,7 +66,7 @@ describe('Account domain', () => {
 });
 
 function generateAccountMocks(params?: { overwriteProps?: any }) {
-    const balanceOrError = AccountBalance.create(faker.random.float({ min: 0, precision: 2 }));
+    const balanceOrError = AccountBalance.create(faker.datatype.float({ min: 0, precision: 2 }));
 
     return {
         accountToCreate: {
