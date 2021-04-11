@@ -2,16 +2,19 @@
 import faker from 'faker';
 import FakeAccountRepository from '@modules/accounts/repositories/implementations/fake/fakeAccountRepository';
 import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
-import { User, UserAge, UserEmail, UserPassword } from '@modules/users/domain';
-import { Account, AccountBalance } from '@modules/accounts/domain';
+import { AccountBalance } from '@modules/accounts/domain';
 import MyDtoValidator from '@shared/validators/implementations/MyDtoValidator';
 import IValidator from '@shared/validators/IValidator';
 import { InvalidParam } from '@core/logic/GenericErrors';
 import { StatusCodes } from 'http-status-codes';
+import CreateUserUseCase from '@modules/users/useCases/createUser/CreateUserUseCase';
 import WithdrawUseCase from './WithdrawUseCase';
 import WithdrawDTOValidation from './WithdrawDTOValidation';
+import CreateAccountUseCase from '../createAccount/CreateAccountUseCase';
 
 let useCase: WithdrawUseCase;
+let createAccountUseCase: CreateAccountUseCase;
+let createUserUseCase: CreateUserUseCase;
 
 let fakeUserRepository: FakeUserRepository;
 let fakeAccountRepository: FakeAccountRepository;
@@ -19,7 +22,7 @@ let fakeAccountRepository: FakeAccountRepository;
 let myDtoValidator: IValidator;
 
 let accountId: string;
-const balance = 100;
+const initialBalance = 100;
 
 describe('WithdrawUseCase', () => {
     beforeEach(async () => {
@@ -27,25 +30,32 @@ describe('WithdrawUseCase', () => {
         fakeAccountRepository = new FakeAccountRepository();
         myDtoValidator = new MyDtoValidator(WithdrawDTOValidation);
 
-        const userPassword = await UserPassword.create(faker.internet.password());
-        const userEmail = UserEmail.create(faker.internet.email());
-        const userAge = UserAge.create(faker.datatype.number({ min: 16, max: 100 }));
+        createAccountUseCase = new CreateAccountUseCase(fakeAccountRepository, fakeUserRepository);
+        createUserUseCase = new CreateUserUseCase(fakeUserRepository, createAccountUseCase);
 
-        const user = User.create({
+        const userOrError = await createUserUseCase.execute({
             name: faker.name.findName(),
-            email: userEmail.value as UserEmail,
-            age: userAge.value as UserAge,
-            password: userPassword.value as UserPassword,
-        }).value as User;
+            email: faker.internet.email(),
+            age: faker.datatype.number({ min: 16, max: 100 }),
+            password: faker.internet.password(),
+        });
 
-        const createdUser = await fakeUserRepository.insert(user);
+        if (userOrError.isLeft()) throw userOrError.value;
 
-        const account = Account.create({
-            userId: createdUser.id,
-            balance: AccountBalance.create(balance).value as AccountBalance,
-        }).value as Account;
+        const createdUser = userOrError.value;
 
-        const createdAccount = await fakeAccountRepository.insert(account);
+        const accountOrError = await fakeAccountRepository.findByUserOrError(createdUser.id);
+
+        if (accountOrError.isLeft()) throw accountOrError.value;
+
+        const createdAccount = accountOrError.value;
+
+        const newBalance = AccountBalance.create(initialBalance);
+
+        await fakeAccountRepository.update({
+            id: createdAccount.id,
+            balance: newBalance.value as AccountBalance,
+        });
 
         accountId = createdAccount.id.toString();
 
@@ -102,6 +112,6 @@ describe('WithdrawUseCase', () => {
 
         expect(account).toBeTruthy();
         expect(account.id).toBe(accountId);
-        expect(account.balance).toBe(balance - value);
+        expect(account.balance).toBe(initialBalance - value);
     });
 });
