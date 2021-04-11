@@ -14,7 +14,8 @@ export class AccountMap {
             balance: account.balance?.value,
             created_at: account.createdAt,
             updated_at: account.updatedAt,
-            deleted: booleanAsDefaultIndicator(!!account.isDeleted),
+            deleted:
+                account.isDeleted === undefined ? undefined : booleanAsDefaultIndicator(!!account.isDeleted),
         };
     }
 

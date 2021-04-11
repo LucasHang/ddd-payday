@@ -1,8 +1,9 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import faker from 'faker';
 import { StatusCodes } from 'http-status-codes';
 import { InvalidParam } from '@core/logic/GenericErrors';
 import FakeUserRepository from '@modules/users/repositories/implementations/fake/fakeUserRepository';
 import FakeAccountRepository from '@modules/accounts/repositories/implementations/fake/fakeAccountRepository';
-import faker from 'faker';
 import { User, UserAge, UserEmail, UserPassword } from '@modules/users/domain';
 import CreateAccountUseCase from './CreateAccountUseCase';
 import CreateAccountDTO from './CreateAccountDTO';

@@ -21,7 +21,7 @@ export default abstract class BaseFakeRepo<T> {
         if (!foundedItem || (!index && index !== 0))
             throw new Error("Fake db says: Y're trying to update an not existent item");
 
-        const updatedItem = { ...foundedItem, ...t };
+        const updatedItem = this.assignDefined(foundedItem, t);
 
         this._items.splice(index, 1, updatedItem);
 
@@ -44,6 +44,17 @@ export default abstract class BaseFakeRepo<T> {
         });
 
         return { foundedItem, index };
+    }
+
+    protected assignDefined(target: T, source: UpdatePartial<T>): T {
+        Object.keys(source).forEach(key => {
+            const val = source[key as keyof UpdatePartial<T>];
+            if (val !== undefined) {
+                (target as any)[key] = val;
+            }
+        });
+
+        return target;
     }
 
     abstract compareFakeItems(a: T, b: T | UpdatePartial<T>): boolean;

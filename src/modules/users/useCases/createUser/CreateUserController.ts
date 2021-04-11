@@ -9,7 +9,8 @@ export default class CreateUserController extends BaseController {
 
     // @Transaction
     public async executeImplementation(): Promise<void | any> {
-        const dto: CreateUserDTO = this.req.body as CreateUserDTO;
+        const dto: CreateUserDTO = this.req.body;
+
         const result = await this.useCase.execute(dto);
 
         if (result.isLeft()) {

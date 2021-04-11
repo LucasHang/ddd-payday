@@ -18,7 +18,7 @@ export class UserMap {
             password: user.password?.value,
             created_at: user.createdAt,
             updated_at: user.updatedAt,
-            deleted: booleanAsDefaultIndicator(!!user.isDeleted),
+            deleted: user.isDeleted === undefined ? undefined : booleanAsDefaultIndicator(!!user.isDeleted),
         };
     }
 
