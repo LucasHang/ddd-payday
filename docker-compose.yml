@@ -1,0 +1,28 @@
+version: "3"
+services:
+    postgres:
+        container_name: postgres-container
+        image: postgres:13
+        environment: 
+            POSTGRES_PASSWORD: "lhang10+"
+        restart: always
+        volumes:
+            - ./data:/var/lib/postgresql/data
+        ports: 
+            - "5432:5432"
+    api:
+        container_name: api-container
+        image: node:14
+        working_dir: /usr/src/ddd-payday
+        restart: always
+        command: bash -c "npm install --only=prod && npm run debug"
+        volumes: 
+            - ./dist/:/usr/src/ddd-payday/dist
+            - ./tsconfig.json:/usr/src/ddd-payday/tsconfig.json # necessário para fazer compile dos paths
+            - ./tsconfig-paths-bootstrap.js:/usr/src/ddd-payday/tsconfig-paths-bootstrap.js # necessário para fazer compile dos paths
+            - ./package.json:/usr/src/ddd-payday/package.json
+        ports: 
+            - "5050:5050"
+            - "9222:9222"
+        links: 
+            - postgres

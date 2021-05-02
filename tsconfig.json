@@ -1,24 +1,37 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "outDir": "./dist",
-    "removeComments": true,
-    "moduleResolution": "node",
-    "baseUrl": "./src",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
-    "paths": {
-      "@core/*": ["./core/*"],
-      "@infra/*": ["./infra/*"],
-      "@modules/*": ["./modules/*"],
-      "@shared/*": ["./shared/*"]
-    }
-  }
+    "compilerOptions": {
+        "lib": [
+            "es5",
+            "es6"
+        ],
+        "target": "es5",
+        "module": "commonjs",
+        "strict": true,
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "removeComments": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false,
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "paths": {
+            "@core/*": ["./core/*"],
+            "@infra/*": ["./infra/*"],
+            "@modules/*": ["./modules/*"],
+            "@shared/*": ["./shared/*"]
+        }
+    },
+    "include": [
+        "src/*.ts",
+        "src/**/*.ts",
+        "src/**/*.js"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }
