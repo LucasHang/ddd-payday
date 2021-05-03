@@ -4,7 +4,9 @@ services:
         container_name: postgres-container
         image: postgres:13
         environment: 
-            POSTGRES_PASSWORD: "lhang10+"
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: lhang10+
+            POSTGRES_DB: dev_ddd_payday
         restart: always
         volumes:
             - ./data:/var/lib/postgresql/data
@@ -20,6 +22,7 @@ services:
             - ./dist/:/usr/src/ddd-payday/dist
             - ./tsconfig.json:/usr/src/ddd-payday/tsconfig.json # necessário para fazer compile dos paths
             - ./tsconfig-paths-bootstrap.js:/usr/src/ddd-payday/tsconfig-paths-bootstrap.js # necessário para fazer compile dos paths
+            - ./ormconfig.js:/usr/src/ddd-payday/ormconfig.js
             - ./package.json:/usr/src/ddd-payday/package.json
         ports: 
             - "5050:5050"

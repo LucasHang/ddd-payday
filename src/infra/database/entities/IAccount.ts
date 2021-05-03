@@ -1,4 +1,4 @@
-import { DefaultIndicador } from '@shared/infra/database/enums';
+import { DefaultIndicator } from '@shared/infra/database/enums';
 
 export default interface IAccount {
     id: string;
@@ -6,5 +6,5 @@ export default interface IAccount {
     balance: number;
     created_at: Date;
     updated_at: Date;
-    deleted: DefaultIndicador;
+    deleted: DefaultIndicator;
 }

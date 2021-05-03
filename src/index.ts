@@ -1,3 +1,5 @@
+import 'reflect-metadata';
 import initServer from '@infra/http/server';
+import connection from '@infra/database/typeorm/connection';
 
-initServer();
+connection.create().then(initServer);

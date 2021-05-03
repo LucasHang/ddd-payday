@@ -1,4 +1,4 @@
-import { DefaultIndicador } from '@shared/infra/database/enums';
+import { DefaultIndicator } from '@shared/infra/database/enums';
 
 export default interface IUser {
     id: string;
@@ -8,5 +8,5 @@ export default interface IUser {
     password: string;
     created_at: Date;
     updated_at: Date;
-    deleted: DefaultIndicador;
+    deleted: DefaultIndicator;
 }
